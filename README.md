@@ -1,3 +1,3 @@
 # test repository
 
-DOes it work?
+Does it work?
