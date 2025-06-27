@@ -13,9 +13,9 @@ jobs:
 
       - name: Checkout dev branch and rebase onto main
         run: |
-          git fetch origin test
-          git checkout test
-          git rebase origin master
+          git fetch -ap
+          git checkout origin/test
+          git rebase origin/master
 
       - name: Push rebased dev branch
         run: |
