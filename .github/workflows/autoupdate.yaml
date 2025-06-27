@@ -1,26 +1,56 @@
-name: autoupdate
+name: 'Auto-rebase develop branch from master'
 on:
   push:
-     branches:
-       - master
+    branches:
+      - master
+
 jobs:
-  rebase_dev:
-    runs-on: ubuntu-latest
+  Rebase:
+    name: 'Auto-rebase develop branch on push into master'
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+
+      - name: Check out in Api Platform repo
+        uses: actions/checkout@v4
         with:
-          ref: test
+          fetch-depth: 0
+          ref: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout dev branch and rebase onto main
+      - name: Setup git user email and name
         run: |
-          git config set advice.mergeConflict false
-          git config set advice.detachedHead false
-          git fetch -ap
-          git checkout -f origin/test
-          git rebase origin/master
+          git config --global user.email "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+        continue-on-error: false
 
-      - name: Push rebased dev branch
+      - name: Checkout to master
         run: |
-          git push -f origin/test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git checkout master
+        continue-on-error: false
+
+      - name: Pull latest changes from master
+        run: |
+          git pull origin master
+          git log --graph --pretty=format:%s
+        continue-on-error: false
+
+      - name: Checkout to develop
+        run: |
+          git checkout test
+        continue-on-error: false
+
+      - name: Make sure develop has latest changes
+        run: |
+          git pull origin test
+        continue-on-error: false
+
+      - name: Perform rebase
+        run: |
+          git rebase master
+        continue-on-error: false
+
+      - name: Force push changes to test
+        run: |
+          git push origin test --force-with-lease
+          git log --graph --pretty=format:%s
+        continue-on-error: false
