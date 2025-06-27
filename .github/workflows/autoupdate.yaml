@@ -4,10 +4,21 @@ on:
      branches:
        - master
 jobs:
-  autoupdate:
-    name: autoupdate
+  rebase_dev:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://chinthakagodawita/autoupdate-action:v1
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Checkout dev branch and rebase onto main
+        run: |
+          git fetch origin test
+          git checkout test
+          git rebase origin master
+
+      - name: Push rebased dev branch
+        run: |
+          git push origin test
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
