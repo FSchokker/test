@@ -20,7 +20,7 @@ jobs:
       - name: Setup git user email and name
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
-          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
         continue-on-error: false
 
       - name: Checkout to master
