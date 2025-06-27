@@ -14,6 +14,7 @@ jobs:
       - name: Checkout dev branch and rebase onto main
         run: |
           git config set advice.mergeConflict false
+          git config set advice.detachedHead to false
           git fetch -ap
           git checkout -f origin/test
           git rebase origin/master
