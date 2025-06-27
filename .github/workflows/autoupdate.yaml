@@ -17,11 +17,6 @@ jobs:
           ref: test
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup git user email and name
-        run: |
-          git config --global user.name "${GITHUB_ACTOR}"
-        continue-on-error: false
-
       - name: Checkout to master
         run: |
           git checkout master
