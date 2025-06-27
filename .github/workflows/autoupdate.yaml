@@ -15,11 +15,11 @@ jobs:
         run: |
           git config set advice.mergeConflict false
           git fetch -ap
-          git checkout origin/test
+          git checkout -f origin/test
           git rebase origin/master
 
       - name: Push rebased dev branch
         run: |
-          git push -f origin test
+          git push -f origin/test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
