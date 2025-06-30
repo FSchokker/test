@@ -36,7 +36,7 @@ jobs:
 
       - name: Make sure develop has latest changes
         run: |
-          git reset --hard origin test
+          git reset origin test
         continue-on-error: false
 
       - name: Perform rebase
