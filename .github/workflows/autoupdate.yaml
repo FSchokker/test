@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: test
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.COMPOSER_TOKEN }}
 
       - name: Setup git user email and name
         run: |
