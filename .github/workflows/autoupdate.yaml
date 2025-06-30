@@ -1,4 +1,4 @@
-name: 'Auto-rebase feature branch from master'
+name: 'Auto-rebase develop branch from master'
 on:
   push:
     branches:
@@ -6,11 +6,11 @@ on:
 
 jobs:
   Rebase:
-    name: 'Auto-rebase feature branch on push into master'
+    name: 'Auto-rebase develop branch on push into master'
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout test branch
+      - name: Check out in Api Platform repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -23,9 +23,14 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
         continue-on-error: false
 
+      - name: Checkout to master
+        run: |
+          git checkout master
+        continue-on-error: false
+
       - name: Pull latest changes from master
         run: |
-          git fetch -ap
+          git pull origin master
           git log --graph --pretty=format:%s
         continue-on-error: false
 
@@ -36,12 +41,12 @@ jobs:
 
       - name: Make sure develop has latest changes
         run: |
-          git reset --hard origin test
+          git pull origin test
         continue-on-error: false
 
       - name: Perform rebase
         run: |
-          git rebase origin master
+          git rebase master
         continue-on-error: false
 
       - name: Force push changes to test
